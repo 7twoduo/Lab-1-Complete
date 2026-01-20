@@ -439,12 +439,18 @@ resource "aws_launch_template" "lab-ec2-app-private" {
   instance_type          = "t3.micro"
   vpc_security_group_ids = [aws_security_group.EC2_SG.id]
   iam_instance_profile {
-    name = aws_iam_instance_profile.this.name
+    name = aws_iam_instance_profile.this.name              #Problem, use the .arn, .name  doesn't work
   }
+    update_default_version = true
+
   tags = {
     Name = "lab-ec2-app-private"
   }
-  depends_on = [data.aws_ami.ec2_golden_ami]
+#  depends_on = [data.aws_ami.ec2_golden_ami]
+#  depends_on = [
+#     aws_iam_instance_profile.this
+#   ]
+
 }
 
 #Placement Group for ASG
@@ -464,8 +470,8 @@ resource "aws_autoscaling_group" "bar" {
   placement_group           = aws_placement_group.private.id
 
   launch_template {
-    id      = aws_launch_template.lab-ec2-app-private.id
-    version = "$Latest"
+    id      = aws_launch_template.lab-ec2-app-private.id         
+    version = "$Default"
 
   }
 
