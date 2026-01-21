@@ -43,29 +43,11 @@ Any variables related to:
 * Subdomains
 * ACM certificates
 
-
-
-## 3️⃣ Change All S3 Bucket Names (REQUIRED)
-
-S3 bucket names are **globally unique across AWS**.
-
-### What to do
-
-Update every S3 bucket name to something unique.
-
-Recommended pattern:
-
-If you do not change bucket names, Terraform will fail with:
-
-
-BucketAlreadyExists
-
-
 ## 🚨 IMPORTANT: Manual EC2 Attachment for the Private Subnet ASG
 
 #Go to the ec2 instance that is in the ASG for the private subnet, attach the appropriate EC2 IAM Role EC2_RDS. Reboot the Instance so the Userdata script restarts and runs properly.
 Create a registered domain and import it into terraform in section 1c line 113
-
+Chnage this the variable called root_domain_name to your root domain example "unshieldedhollow.click" and change the variable route53_domain_name to "www.unshieldedhollow.click"
 
 ## 4️⃣ Customize Variables
 
