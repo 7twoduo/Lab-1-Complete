@@ -66,11 +66,6 @@ variable "secret_location" {
   type        = string
   default     = "lab/rds/mysqv2"
 }
-variable "s3_bucket" {
-  description = "The name of the S3 bucket to create"
-  type        = string
-  default     = "input value"
-}
 variable "s3_bucket_no_access" {
   description = "No public access to bucket"
   type        = bool
