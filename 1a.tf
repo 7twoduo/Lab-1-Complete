@@ -311,7 +311,7 @@ resource "aws_iam_policy" "secretsmanager_read_policy" {
         "Sid" : "ReadSpecificSecret",
         "Effect" : "Allow",
         "Action" : ["secretsmanager:GetSecretValue"],
-        "Resource" : "arn:aws:secretsmanager:${var.aws_region}:${local.account_id}:secret:${var.secret_location}*" #Remember add a * or your policy will not work
+        "Resource" : "arn:aws:secretsmanager:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:secret:${var.secret_location}*" #Remember add a * or your policy will not work
       }
     ]
   })
@@ -332,7 +332,7 @@ resource "aws_iam_policy" "parameter_store_secrets" {
           "ssm:GetParametersByPath"
         ]
         Resource = [
-          "arn:aws:ssm:${var.aws_region}:${local.account_id}:parameter/*"
+          "arn:aws:ssm:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:parameter/*"
         ]
       }
     ]
