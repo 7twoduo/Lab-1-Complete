@@ -121,7 +121,7 @@ resource "aws_cloudwatch_metric_alarm" "rds-CPUUtilization" {
 #S3 Gateway VPC Endpoint for S3 access within the VPC
 resource "aws_vpc_endpoint" "s3_gateway_endpoint" {
   vpc_id            = local.vpc_id
-  service_name      = "com.amazonaws.${var.aws_region}.s3"
+  service_name      = "com.amazonaws.${data.aws_region.current.region}.s3"
   vpc_endpoint_type = "Gateway"
   route_table_ids   = [aws_route_table.Private.id]
 
@@ -133,7 +133,7 @@ resource "aws_vpc_endpoint" "s3_gateway_endpoint" {
 # Cloudwatch Endpoint
 resource "aws_vpc_endpoint" "logs" {
   vpc_id             = local.vpc_id
-  service_name       = "com.amazonaws.${var.aws_region}.logs" # Use the specific service name for CloudWatch Logs
+  service_name       = "com.amazonaws.${data.aws_region.current.region}.logs" # Use the specific service name for CloudWatch Logs
   vpc_endpoint_type  = "Interface"
   subnet_ids         = [aws_subnet.Star_Private_AZ1.id, aws_subnet.Star_Private_AZ2.id]
   security_group_ids = [aws_security_group.Endpoint_SG.id]
@@ -150,7 +150,7 @@ resource "aws_vpc_endpoint" "logs" {
 resource "aws_vpc_endpoint" "secrets_manager" {
   vpc_id              = local.vpc_id
   vpc_endpoint_type   = "Interface"
-  service_name        = "com.amazonaws.${var.aws_region}.secretsmanager"
+  service_name        = "com.amazonaws.${data.aws_region.current.region}.secretsmanager"
   subnet_ids          = [aws_subnet.Star_Private_AZ1.id, aws_subnet.Star_Private_AZ2.id]
   security_group_ids  = [aws_security_group.Endpoint_SG.id]
   private_dns_enabled = true
@@ -164,7 +164,7 @@ resource "aws_vpc_endpoint" "secrets_manager" {
 resource "aws_vpc_endpoint" "sts" {
   vpc_id              = local.vpc_id
   vpc_endpoint_type   = "Interface"
-  service_name        = "com.amazonaws.${var.aws_region}.sts"
+  service_name        = "com.amazonaws.${data.aws_region.current.region}.sts"
   subnet_ids          = [aws_subnet.Star_Private_AZ1.id, aws_subnet.Star_Private_AZ2.id]
   security_group_ids  = [aws_security_group.Endpoint_SG.id]
   private_dns_enabled = true
@@ -177,7 +177,7 @@ resource "aws_vpc_endpoint" "sts" {
 resource "aws_vpc_endpoint" "kms" {
   vpc_id            = local.vpc_id
   vpc_endpoint_type = "Interface"
-  service_name      = "com.amazonaws.${var.aws_region}.kms"
+  service_name      = "com.amazonaws.${data.aws_region.current.region}.kms"
   subnet_ids = [
     aws_subnet.Star_Private_AZ1.id,
     aws_subnet.Star_Private_AZ2.id
@@ -193,7 +193,7 @@ resource "aws_vpc_endpoint" "kms" {
 # EC2 Messages VPC Endpoint
 resource "aws_vpc_endpoint" "ec2messages" {
   # The service name format is "com.amazonaws.<region>.ec2messages"
-  service_name      = "com.amazonaws.${var.aws_region}.ec2messages"
+  service_name      = "com.amazonaws.${data.aws_region.current.region}.ec2messages"
   vpc_id            = local.vpc_id
   vpc_endpoint_type = "Interface"
   # Associate the endpoint with your private subnet IDs
@@ -211,7 +211,7 @@ resource "aws_vpc_endpoint" "ec2messages" {
 # SSM VPC Endpoint
 resource "aws_vpc_endpoint" "ssmmessages" {
   vpc_id              = local.vpc_id
-  service_name        = "com.amazonaws.${var.aws_region}.ssmmessages"
+  service_name        = "com.amazonaws.${data.aws_region.current.region}.ssmmessages"
   vpc_endpoint_type   = "Interface"
   security_group_ids  = [aws_security_group.Endpoint_SG.id]
   subnet_ids          = [aws_subnet.Star_Private_AZ1.id, aws_subnet.Star_Private_AZ2.id]
@@ -223,7 +223,7 @@ resource "aws_vpc_endpoint" "ssmmessages" {
 }
 resource "aws_vpc_endpoint" "ssm" {
   vpc_id             = local.vpc_id
-  service_name       = "com.amazonaws.${var.aws_region}.ssm"
+  service_name       = "com.amazonaws.${data.aws_region.current.region}.ssm"
   vpc_endpoint_type  = "Interface"
   security_group_ids = [aws_security_group.Endpoint_SG.id]
   subnet_ids = [
