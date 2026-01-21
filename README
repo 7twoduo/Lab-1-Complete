@@ -25,15 +25,14 @@ If this lab creates an **SNS topic with an email subscription**, you must replac
 
 Locate the SNS subscription and update the email endpoint:
 
-```hcl
+
 endpoint = "your-email@example.com"
-```
+
 
 ### After Apply
 
 AWS will send a **confirmation email**. The subscription will not activate until you confirm it.
 
----
 
 ## 2️⃣ Update Domain-Related Variables
 
@@ -44,19 +43,7 @@ Any variables related to:
 * Subdomains
 * ACM certificates
 
-must be updated to a **domain you own and have registered**.
 
-### Example
-
-```hcl
-variable "domain_name" {
-  default = "example.com"
-}
-```
-
-⚠️ Using a domain you do not own will cause **DNS and certificate validation failures**.
-
----
 
 ## 3️⃣ Change All S3 Bucket Names (REQUIRED)
 
@@ -68,23 +55,17 @@ Update every S3 bucket name to something unique.
 
 Recommended pattern:
 
-```hcl
-my-project-${var.env}-${random_id.this.hex}
-```
-
 If you do not change bucket names, Terraform will fail with:
 
-```
-BucketAlreadyExists
-```
 
----
+BucketAlreadyExists
+
 
 ## 🚨 IMPORTANT: Manual EC2 Attachment for the Private Subnet ASG
 
 #Go to the ec2 instance that is in the ASG for the private subnet, attach the appropriate EC2 IAM Role EC2_RDS. Reboot the Instance so the Userdata script restarts and runs properly.
+Create a registered domain and import it into terraform in section 1c line 113
 
----
 
 ## 4️⃣ Customize Variables
 
@@ -98,7 +79,7 @@ This lab is intentionally configurable. You are encouraged to change:
 
 Review `variables.tf` carefully before applying.
 
----
+
 
 ## 5️⃣ Importing Existing AWS Resources
 
@@ -113,59 +94,11 @@ No resource identifier returned
 
 In these cases, you must **import the resource into Terraform state**.
 
-### General Syntax
-
-```bash
-terraform import <resource_type>.<resource_name> <aws_resource_id>
-```
-
-### Common Examples
-
-**Route 53 Hosted Zone**
-
-```bash
-terraform import aws_route53_zone.main Z123456ABCDEFG
-```
-
-**S3 Bucket**
-
-```bash
-terraform import aws_s3_bucket.logs my-existing-bucket-name
-```
-
 **ACM Certificate**
-
-```bash
+Example
 terraform import aws_acm_certificate.cert arn:aws:acm:region:account:certificate/xxxx
-```
 
-After importing, always run:
 
-```bash
-terraform plan
-```
-
-and confirm no unexpected changes appear.
-
----
-
-## 6️⃣ If Terraform Wants to Destroy Something Unexpected
-
-🚨 **Stop immediately** if `terraform plan` shows:
-
-* Destruction of critical resources
-* Forced replacement of infrastructure you care about
-
-Checklist:
-
-* Verify variable values
-* Review `count` and `for_each` conditions
-* Confirm imports were successful
-* Ensure you are in the correct AWS account
-
-Never apply blindly.
-
----
 
 ## 7️⃣ Recommended Workflow
 
