@@ -236,32 +236,3 @@ resource "aws_vpc_endpoint" "ssm" {
     Name = "ssm-endpoint"
   }
 }
-
-
-# resource "aws_s3_bucket_policy" "lb-bucket-policy" {
-#   bucket = aws_s3_bucket.spire.id
-
-#   policy = jsonencode({
-#   "Version": "2012-10-17",
-#   "Statement": [
-#     {
-#       "Sid": "AllowALBAccessLogs",
-#       "Effect": "Allow",
-#       "Principal": {
-#         "Service": "elasticloadbalancing.amazonaws.com"
-#       },
-#       "Action": "s3:PutObject",
-#       "Resource": "${aws_s3_bucket.spire.id}/AWSLOGS/${data.aws_caller_identity.current.account_id}/*",
-#       "Condition": {
-#         "StringEquals": {
-#           "aws:SourceAccount": "814910273374"
-#         },
-#         "ArnLike": {
-#           "aws:SourceArn": "arn:aws:elasticloadbalancing:us-east-1:814910273374:loadbalancer/app/*"
-#         }
-#       }
-#     }
-#   ]
-# }
-# }
-  
