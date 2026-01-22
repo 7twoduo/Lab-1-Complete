@@ -47,7 +47,8 @@ Any variables related to:
 
 #Go to the ec2 instance that is in the ASG for the private subnet, attach the appropriate EC2 IAM Role EC2_RDS. Reboot the Instance so the Userdata script restarts and runs properly.
 Create a registered domain and import it into terraform in section 1c line 113
-Chnage this the variable called root_domain_name to your root domain example "unshieldedhollow.click" and change the variable route53_domain_name to "www.unshieldedhollow.click"
+Change this the variable called root_domain_name to your root domain example "unshieldedhollow.click" and change the variable route53_domain_name to "www.unshieldedhollow.click"
+Remember to change the region fo the userdata script if you are deploying in another region. Always change the secrets manager path when ever you reploy in the same region after destroying 
 
 ## 4️⃣ Customize Variables
 
@@ -67,7 +68,7 @@ Make sure to clear out the s3 bucket or use ai like claude that will do it for y
 
 Beware
 S3 bucket can take 40 minutes some time in creation or more. It is an AWS side problem. I ran into that problem when deploying to a different region.
-
+Reme
 ## 🎉 Enjoy the Code
 
 Feel free to explore, modify, and extend this lab.
