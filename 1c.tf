@@ -1,6 +1,6 @@
 #s3 Bucket
 resource "aws_s3_bucket" "spire" {
-  bucket = "aws-alb-logs-${var.Environment}-${data.aws_caller_identity.current.account_id}"
+  bucket = "aws-alb-logs-${data.aws_region.current.region}-${var.Environment}-${data.aws_caller_identity.current.account_id}"
   region = data.aws_region.current.region
 
   tags = {
@@ -466,7 +466,7 @@ resource "aws_wafv2_web_acl_logging_configuration" "chewbacca_waf_logging01" {
 resource "aws_s3_bucket" "star_waf_bucket_uno" {
   count = var.waf_log_dest == "s3" ? 1 : 0
 
-  bucket = "aws-waf-logs-${var.Environment}-${data.aws_caller_identity.current.account_id}"
+  bucket = "aws-waf-logs-${data.aws_region.current.region}-${var.Environment}-${data.aws_caller_identity.current.account_id}"
 
   tags = {
     Name = "${var.Environment}-waf-logs-bucket01"
@@ -505,7 +505,7 @@ resource "aws_wafv2_web_acl_logging_configuration" "chewbacca_waf_logging_s3_01"
 resource "aws_s3_bucket" "star_firehouse_waf_log" {
   count = var.firehose_log == "firehose" ? 1 : 0
 
-  bucket = "${var.Environment}-waf-firehose-dest-${data.aws_caller_identity.current.account_id}"
+  bucket = "${data.aws_region.current.region}-${var.Environment}-waf-firehose-dest-${data.aws_caller_identity.current.account_id}"
 
   tags = {
     Name = "${var.Environment}-waf-firehose-dest-bucket01"
