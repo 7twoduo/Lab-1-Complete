@@ -1,23 +1,28 @@
 #Provider configuration
 terraform {
+  required_version = "1.14.3"
   required_providers {
     aws = {
       source = "hashicorp/aws"
+      version = "6.28.0"
     }
     tls = {
       source = "hashicorp/tls"
+      version = "4.1.0"
     }
     local = {
       source = "hashicorp/local"
+      version = "2.6.1"
     }
     random = {
       source = "hashicorp/random"
+      version = "3.8.0"
     }
   }
 }
 
 provider "aws" {
-  region = "us-east-2"
+  region = "us-east-1"
 }
 
 
@@ -36,7 +41,7 @@ resource "aws_vpc" "Star" {
 
 
   tags = {
-    Name = "Star_VPC"
+    Name = "star"
   }
 }
 
@@ -66,9 +71,9 @@ resource "aws_subnet" "Star_Public_AZ2" {
 
 #Private Subnet in AZ1
 resource "aws_subnet" "Star_Private_AZ1" {
-  vpc_id            = local.vpc_id
-  cidr_block        = var.private_subnet_cidr1
-  availability_zone = data.aws_availability_zones.available.names[0]
+  vpc_id                  = local.vpc_id
+  cidr_block              = var.private_subnet_cidr1
+  availability_zone       = data.aws_availability_zones.available.names[0]
   map_public_ip_on_launch = var.private_subnet
 
   tags = {
@@ -76,9 +81,9 @@ resource "aws_subnet" "Star_Private_AZ1" {
   }
 }
 resource "aws_subnet" "Star_Private_AZ2" {
-  vpc_id            = local.vpc_id
-  cidr_block        = var.private_subnet_cidr2
-  availability_zone = data.aws_availability_zones.available.names[1]
+  vpc_id                  = local.vpc_id
+  cidr_block              = var.private_subnet_cidr2
+  availability_zone       = data.aws_availability_zones.available.names[1]
   map_public_ip_on_launch = var.private_subnet
 
   tags = {
@@ -305,7 +310,7 @@ resource "aws_iam_policy" "secretsmanager_read_policy" {
   })
 }
 resource "aws_iam_policy" "parameter_store_secrets" {
-  name        = "${var.Environment}-lp-ssm-read01"
+  name        = "${local.Environment}-lp-ssm-read01"
   description = "Least-privilege read for SSM Parameter Store under /lab/db/*"
 
   policy = jsonencode({
@@ -320,14 +325,14 @@ resource "aws_iam_policy" "parameter_store_secrets" {
           "ssm:GetParametersByPath"
         ]
         Resource = [
-          "arn:aws:ssm:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:parameter/*"
+          "arn:aws:ssm:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:parameter${var.parameter_location}**"
         ]
       }
     ]
   })
 }
 resource "aws_iam_policy" "cloudwatch_least_priviege" {
-  name        = "${var.Environment}-lp-cwlogs01"
+  name        = "${local.Environment}-lp-cwlogs01"
   description = "Least-privilege CloudWatch Logs write for the app log group"
 
   policy = jsonencode({
@@ -427,9 +432,9 @@ resource "aws_launch_template" "lab-ec2-app-private" {
   instance_type          = "t3.micro"
   vpc_security_group_ids = [aws_security_group.EC2_SG.id]
   iam_instance_profile {
-    name = aws_iam_instance_profile.this.name              #Use .name
+    name = aws_iam_instance_profile.this.name #Use .name
   }
-    update_default_version = true
+  update_default_version = true
 
   tags = {
     Name = "lab-ec2-app-private"
@@ -453,7 +458,7 @@ resource "aws_autoscaling_group" "bar" {
   placement_group           = aws_placement_group.private.id
 
   launch_template {
-    id      = aws_launch_template.lab-ec2-app-private.id         
+    id      = aws_launch_template.lab-ec2-app-private.id
     version = "$Default"
 
   }
